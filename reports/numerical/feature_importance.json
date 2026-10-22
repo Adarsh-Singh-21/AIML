@@ -1,0 +1,89 @@
+{
+  "model_sha256": "b03b0498c128de3028234b7fbbed9abe227f0e2e26de97e823c9ebf5f5b4387c",
+  "split_id": "84603db211dc1463ee020039f3227caad73f3a8cf4b274683ea59e53384251e8",
+  "run": "numerical_v1",
+  "partition": "training only",
+  "records": 512,
+  "repeats": 5,
+  "seed": 42,
+  "scoring": "balanced accuracy",
+  "training_subset_score": 0.6342347429303952,
+  "features": [
+    {
+      "feature": "AGE",
+      "importance": 0.09384528514963304,
+      "std": 0.022838380632102653
+    },
+    {
+      "feature": "GENDER",
+      "importance": 0.0007538877104094954,
+      "std": 0.003370218448769105
+    },
+    {
+      "feature": "SMOKING",
+      "importance": 0.00896271765836989,
+      "std": 0.006501616238999738
+    },
+    {
+      "feature": "YELLOW_FINGERS",
+      "importance": 0.005101713797366037,
+      "std": 0.009731740255363618
+    },
+    {
+      "feature": "ANXIETY",
+      "importance": 0.0031712118668641097,
+      "std": 0.0031857644451223376
+    },
+    {
+      "feature": "PEER_PRESSURE",
+      "importance": 0.010212584125627667,
+      "std": 0.005184234211842769
+    },
+    {
+      "feature": "CHRONIC_DISEASE",
+      "importance": -0.0011949272818837287,
+      "std": 0.004360936626786972
+    },
+    {
+      "feature": "FATIGUE",
+      "importance": 0.014569566743479822,
+      "std": 0.009720362578324567
+    },
+    {
+      "feature": "ALLERGY",
+      "importance": 0.010221740656523325,
+      "std": 0.005012631776065235
+    },
+    {
+      "feature": "WHEEZING",
+      "importance": 0.019570558700993577,
+      "std": 0.009987779156315709
+    },
+    {
+      "feature": "ALCOHOL_CONSUMING",
+      "importance": 0.007601446731881567,
+      "std": 0.010809986553734354
+    },
+    {
+      "feature": "COUGHING",
+      "importance": 0.026189204450074045,
+      "std": 0.012651828901766828
+    },
+    {
+      "feature": "SHORTNESS_OF_BREATH",
+      "importance": 0.00899018725105689,
+      "std": 0.0031471681800083542
+    },
+    {
+      "feature": "SWALLOWING_DIFFICULTY",
+      "importance": -0.0035115295984860405,
+      "std": 0.003761662308091541
+    },
+    {
+      "feature": "CHEST_PAIN",
+      "importance": 0.012188868710607915,
+      "std": 0.005471457350127621
+    }
+  ],
+  "limitation": "In-sample reliance on training records, not external validation, clinical relevance, or causality."
+}

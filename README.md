@@ -4,13 +4,19 @@ A complete academic tabular ML project using the exact [Akash Nath dataset](http
 
 **Measured limitation:** selected model **hist_gradient_boosting**, test accuracy **50.92%**, macro F1 **0.508**, ROC AUC **0.531**. Majority-label baseline accuracy is **50.58%**. This evaluation shows little predictive skill. The interface makes this explicit; these scores do not justify medical use.
 
+**Developed by:** Adarsh Raj Choudhary, Adarsh Singh, Adith K P.
+
+**Submitted to:** Prof. Vaishali Ingale.
+
+The Evaluation page uses the saved test results for the selected model and baseline, with candidate cross-validation shown separately. Its training-only permutation importance is a model-reliance diagnostic, not clinical relevance or causality. Regenerate it with `python -m lung_tabular.diagnostics`.
+
 ## Run on this laptop
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\run.ps1
 ```
 
-Open http://localhost:8501. In Single record, enter all 15 inputs or load an example, then select Predict dataset label. The CSV batch tab accepts numerical records and provides a template. Changing inputs clears previous predictions. Uploaded records are processed in memory and are not saved.
+Open http://localhost:8501. The sidebar groups Home, Data, Preprocessing & EDA, Training & Tuning, Evaluation, Model Insights, Single-record prediction, and CSV batch prediction. Enter all 15 inputs or load an example on the prediction page, then select Predict dataset label. The CSV batch page provides a template. Changing inputs clears previous predictions. Uploaded records are processed in memory and are not saved.
 
 ## Set up a fresh machine
 
@@ -70,7 +76,7 @@ Use `--encoding survey` for original F/M and 1/2 input codes. `python -m lung_ai
 
 ## Project files
 
-- app.py: numerical single-record and CSV application.
+- app.py and ui_pages/: grouped sidebar navigation, Home, model-building pages, Evaluation, and numerical prediction pages.
 - lung_tabular/: strict input schema, dataset audit, training, prediction, reporting, and packaging.
 - data/numerical/akashnath29/: requested dataset and provenance.
 - artifacts/numerical/: active pointer, saved Pipeline, metadata, CV scores, and frozen test predictions.

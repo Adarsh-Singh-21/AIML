@@ -35,13 +35,19 @@ A complete academic tabular ML project using the exact [Akash Nath dataset]({DAT
 
 **Measured limitation:** selected model **{metadata['model']}**, test accuracy **{test['accuracy']:.2%}**, macro F1 **{test['macro_f1']:.3f}**, ROC AUC **{test['roc_auc']:.3f}**. Majority-label baseline accuracy is **{test['baseline']['accuracy']:.2%}**. This evaluation shows little predictive skill. The interface makes this explicit; these scores do not justify medical use.
 
+**Developed by:** Adarsh Raj Choudhary, Adarsh Singh, Adith K P.
+
+**Submitted to:** Prof. Vaishali Ingale.
+
+The Evaluation page uses the saved test results for the selected model and baseline, with candidate cross-validation shown separately. Its training-only permutation importance is a model-reliance diagnostic, not clinical relevance or causality. Regenerate it with `python -m lung_tabular.diagnostics`.
+
 ## Run on this laptop
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\\run.ps1
 ```
 
-Open http://localhost:8501. In Single record, enter all 15 inputs or load an example, then select Predict dataset label. The CSV batch tab accepts numerical records and provides a template. Changing inputs clears previous predictions. Uploaded records are processed in memory and are not saved.
+Open http://localhost:8501. The sidebar groups Home, Data, Preprocessing & EDA, Training & Tuning, Evaluation, Model Insights, Single-record prediction, and CSV batch prediction. Enter all 15 inputs or load an example on the prediction page, then select Predict dataset label. The CSV batch page provides a template. Changing inputs clears previous predictions. Uploaded records are processed in memory and are not saved.
 
 ## Set up a fresh machine
 
@@ -87,7 +93,7 @@ Use `--encoding survey` for original F/M and 1/2 input codes. `python -m lung_ai
 
 ## Project files
 
-- app.py: numerical single-record and CSV application.
+- app.py and ui_pages/: grouped sidebar navigation, Home, model-building pages, Evaluation, and numerical prediction pages.
 - lung_tabular/: strict input schema, dataset audit, training, prediction, reporting, and packaging.
 - data/numerical/akashnath29/: requested dataset and provenance.
 - artifacts/numerical/: active pointer, saved Pipeline, metadata, CV scores, and frozen test predictions.
@@ -157,8 +163,8 @@ Source: {source['publisher']}, [Lung Cancer Dataset]({DATASET_URL}), version 2. 
 2. State the task accurately: predicting NO/YES dataset labels from numerical coded inputs.
 3. Show the dataset source, actual columns, encoding dictionary, exclusions, and fixed split.
 4. Load example 1 in Single record. Explain that it is a training example selected by row hash, not correctness. Predict and download the JSON. Change an input to show the previous result clearing.
-5. In CSV batch, download the example, upload it, choose numeric encoding, run prediction, and download the CSV. Show the separate original-source encoding option.
-6. Open Training & results. Explain training-only CV selection and held-out evaluation. State the near-chance result and the majority-label baseline; do not present it as a useful cancer detector.
+5. On the CSV batch page, download the example, upload it, choose numeric encoding, run prediction, and download the CSV. Show the separate original-source encoding option.
+6. Open 4 · Evaluation. Show the Accuracy/Precision/Recall/F1 cards, highlighted metrics table, and grouped comparison chart. Explore confusion matrices, ROC, feature importance, class breakdown, and cross-validation. Use the sidebar Evaluation focus to switch between YES-class and macro-average metrics. Explain training-only CV selection and held-out evaluation. State the near-chance result and the majority-label baseline; do not present it as a useful cancer detector.
 7. Show the notebook and retraining command. Subsequent runs do not repeatedly evaluate the viewed test split.
 8. Discuss future work: verify source labels and clinical codebook, obtain an appropriate independent cohort, then evaluate calibration and clinical relevance. More models cannot substitute for informative, verified data.
 
@@ -205,7 +211,7 @@ The selected model improves accuracy by only {(test['accuracy']-test['baseline']
 
 ## 5. Application and reproducibility
 
-Single-record entry requires all 15 values and clears predictions when any field changes. CSV prediction accepts an explicit numerical or source-code encoding, rejects target/extra columns and invalid values, processes uploads in memory, and returns numerical features, dataset label, two model scores, run identity, and artifact hash. Scores are not displayed as individual cancer risk. Model loading verifies the hash, schema, feature order, class order, and scikit-learn version. Preprocessing travels with the model Pipeline. The model is bundled for inference without raw training data.
+The sidebar groups Overview, Build the model, and Use the model. It includes the requested developer names and Submitted to: Prof. Vaishali Ingale. The dedicated /evaluation route presents metric cards, a highlighted comparison table, grouped charts, confusion matrices, ROC, training-only feature importance, class breakdown, and CV in separate tabs. Candidate CV scores are never labelled as test scores. The sidebar averaging control switches precision/recall/F1 between YES-class and macro averages. Single-record entry requires all 15 values and clears predictions when any field changes. CSV prediction accepts an explicit numerical or source-code encoding, rejects target/extra columns and invalid values, processes uploads in memory, and returns numerical features, dataset label, two model scores, run identity, and artifact hash. Scores are not displayed as individual cancer risk. Model loading verifies the hash, schema, feature order, class order, and scikit-learn version. Preprocessing travels with the model Pipeline. The model is bundled for inference without raw training data.
 
 setup.ps1 installs CPU dependencies. run.ps1 starts the local app. train.ps1 trains a new named run without overwriting old results. The notebook reproduces the numerical workflow and reuses saved training by default. Source, model, data provenance, notebook, reports, tests, and setup scripts are packaged together. Software and portability checks are in numerical/VERIFICATION.json.
 

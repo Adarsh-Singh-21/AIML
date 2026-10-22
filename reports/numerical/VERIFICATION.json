@@ -4,7 +4,7 @@
   "dataset_version": 2,
   "csv_sha256": "417052af60ea9da985478d93d6be49749d25c8d0168a14bbd9f94515ab80c6ce",
   "automated_tests": {
-    "passed": 13,
+    "passed": 15,
     "failed": 0
   },
   "real_app_checks": {
@@ -24,7 +24,30 @@
     "numerical_form": "verified",
     "age_and_coded_features": "visible",
     "near_chance_warning": "visible",
-    "preview": "reports/numerical/app_preview.jpg"
+    "preview": "reports/numerical/evaluation_preview.jpg",
+    "grouped_sidebar": "verified at desktop and narrow widths",
+    "project_credits": "Adarsh Raj Choudhary, Adarsh Singh, Adith K P; Prof. Vaishali Ingale",
+    "evaluation_metrics": "verified against frozen selected-model and majority-baseline evidence",
+    "evaluation_controls": "YES / macro averaging, normalized confusion matrix, and training-only importance verified",
+    "home_preview": "reports/numerical/sidebar_home.jpg",
+    "sidebar_alignment": {
+      "desktop_viewport": [
+        1366,
+        900
+      ],
+      "mobile_viewport": [
+        390,
+        844
+      ],
+      "rows_checked": 8,
+      "maximum_icon_label_center_difference_px": 0,
+      "consistent_icon_and_label_columns": true,
+      "clipped_navigation_labels": 0,
+      "mobile_document_width_px": 390,
+      "verification": "Browser-rendered element bounds and screenshots; no model changes",
+      "home_workflow_cards": "Equal heights verified in the browser; content can grow without clipping",
+      "home_action_buttons": "Consistent column widths; Evaluation navigation verified"
+    }
   },
   "test_evaluation": {
     "records": 599,
@@ -40,7 +63,9 @@
     "csv_prediction_records": 2,
     "raw_training_csv_required_for_inference": false,
     "legacy_ct_excluded": true,
-    "environment": "Existing installed Python environment reused; source and model resolved inside extracted package. Fresh dependency installation was not repeated."
+    "environment": "Existing installed Python environment reused; source and model resolved inside extracted package. Fresh dependency installation was not repeated.",
+    "sidebar_pages_checked": 8,
+    "fresh_archive_navigation": "passed"
   },
   "powershell_script_syntax": {
     "setup.ps1": "passed",
@@ -48,5 +73,11 @@
     "train.ps1": "passed"
   },
   "dependency_check": "pip check passed: no broken requirements",
-  "archive_integrity": "ZIP CRC and every packaged file SHA-256 verified; archive hash recorded in submission/Lung_Numerical_Project_info.json"
+  "archive_integrity": "ZIP CRC and every packaged file SHA-256 verified; archive hash recorded in submission/Lung_Numerical_Project_info.json",
+  "sidebar_update": {
+    "model_weights": "unchanged; SHA-256 matches the prior committed model",
+    "training_data": "unchanged; SHA-256 matches the prior committed CSV",
+    "held_out_results": "unchanged; test candidates were not reevaluated",
+    "importance_diagnostics": "512 training-only records, 5 permutations, balanced accuracy"
+  }
 }

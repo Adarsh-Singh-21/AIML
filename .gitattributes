@@ -1,0 +1,5 @@
+# These artifacts are verified by their exact byte hashes at runtime.
+data/numerical/akashnath29/lung_cancer.csv -text
+artifacts/numerical/**/*.joblib -text
+*.png -text
+*.jpg -text

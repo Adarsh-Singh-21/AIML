@@ -1,0 +1,31 @@
+.venv/
+.cache/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.ipynb_checkpoints/
+data/raw/
+data/downloads/
+# Preserve the previous image project locally, outside the numerical repository.
+legacy_ct/
+
+# Include the trained numerical pipeline; exclude other model experiments.
+artifacts/*
+!artifacts/numerical/
+
+# Include only the user-selected public numerical dataset.
+data/*
+!data/numerical/
+data/numerical/*
+!data/numerical/akashnath29/
+
+submission/
+
+# Never publish local credentials or editor/OS state.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+Thumbs.db

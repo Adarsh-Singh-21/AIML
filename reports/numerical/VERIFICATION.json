@@ -1,0 +1,52 @@
+{
+  "project": "numerical questionnaire classification",
+  "dataset": "akashnath29/lung-cancer-dataset",
+  "dataset_version": 2,
+  "csv_sha256": "417052af60ea9da985478d93d6be49749d25c8d0168a14bbd9f94515ab80c6ce",
+  "automated_tests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "real_app_checks": {
+    "saved_model": "passed",
+    "single_record_matches_shared_predictor": true,
+    "csv_batch_records": 2,
+    "input_change_clears_prediction": true,
+    "quality_warning": "visible",
+    "image_controls": "absent"
+  },
+  "notebook": "executed successfully; existing numerical run and saved test results reused",
+  "server": {
+    "url": "http://localhost:8501",
+    "http_health": 200
+  },
+  "browser": {
+    "numerical_form": "verified",
+    "age_and_coded_features": "visible",
+    "near_chance_warning": "visible",
+    "preview": "reports/numerical/app_preview.jpg"
+  },
+  "test_evaluation": {
+    "records": 599,
+    "accuracy": 0.5091819699499165,
+    "majority_baseline_accuracy": 0.5058430717863105,
+    "interpretation": "near chance; no useful clinical predictive skill established"
+  },
+  "prior_ct_project": "preserved under legacy_ct; excluded from active app and new archive",
+  "package_portability": {
+    "status": "passed",
+    "fresh_archive_extraction": true,
+    "single_record_app_prediction": "passed",
+    "csv_prediction_records": 2,
+    "raw_training_csv_required_for_inference": false,
+    "legacy_ct_excluded": true,
+    "environment": "Existing installed Python environment reused; source and model resolved inside extracted package. Fresh dependency installation was not repeated."
+  },
+  "powershell_script_syntax": {
+    "setup.ps1": "passed",
+    "run.ps1": "passed",
+    "train.ps1": "passed"
+  },
+  "dependency_check": "pip check passed: no broken requirements",
+  "archive_integrity": "ZIP CRC and every packaged file SHA-256 verified; archive hash recorded in submission/Lung_Numerical_Project_info.json"
+}

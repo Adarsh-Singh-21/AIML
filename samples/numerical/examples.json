@@ -1,0 +1,47 @@
+{
+  "selection": "First two training row hashes; not chosen by prediction correctness.",
+  "examples": [
+    {
+      "inputs": {
+        "AGE": 53,
+        "GENDER": 1,
+        "SMOKING": 1,
+        "YELLOW_FINGERS": 1,
+        "ANXIETY": 0,
+        "PEER_PRESSURE": 0,
+        "CHRONIC_DISEASE": 0,
+        "FATIGUE": 1,
+        "ALLERGY": 0,
+        "WHEEZING": 0,
+        "ALCOHOL_CONSUMING": 0,
+        "COUGHING": 1,
+        "SHORTNESS_OF_BREATH": 1,
+        "SWALLOWING_DIFFICULTY": 1,
+        "CHEST_PAIN": 1
+      },
+      "source_row_id": "00048811a2b3f462825fa81b23cf16378d8c17d5d3252898169fa080aeb43632",
+      "dataset_label": "NO"
+    },
+    {
+      "inputs": {
+        "AGE": 35,
+        "GENDER": 0,
+        "SMOKING": 1,
+        "YELLOW_FINGERS": 1,
+        "ANXIETY": 1,
+        "PEER_PRESSURE": 1,
+        "CHRONIC_DISEASE": 0,
+        "FATIGUE": 1,
+        "ALLERGY": 1,
+        "WHEEZING": 1,
+        "ALCOHOL_CONSUMING": 0,
+        "COUGHING": 0,
+        "SHORTNESS_OF_BREATH": 0,
+        "SWALLOWING_DIFFICULTY": 0,
+        "CHEST_PAIN": 1
+      },
+      "source_row_id": "001fb1fd7caff63386c43f68189d8f1771d8ecba6e480e149ab5f6eb8a482f6e",
+      "dataset_label": "YES"
+    }
+  ]
+}

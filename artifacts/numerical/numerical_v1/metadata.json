@@ -1,0 +1,213 @@
+{
+  "schema_version": "akashnath29-numeric-v1",
+  "model": "hist_gradient_boosting",
+  "run": "numerical_v1",
+  "features": [
+    "AGE",
+    "GENDER",
+    "SMOKING",
+    "YELLOW_FINGERS",
+    "ANXIETY",
+    "PEER_PRESSURE",
+    "CHRONIC_DISEASE",
+    "FATIGUE",
+    "ALLERGY",
+    "WHEEZING",
+    "ALCOHOL_CONSUMING",
+    "COUGHING",
+    "SHORTNESS_OF_BREATH",
+    "SWALLOWING_DIFFICULTY",
+    "CHEST_PAIN"
+  ],
+  "labels": [
+    "NO",
+    "YES"
+  ],
+  "age_range": [
+    30,
+    80
+  ],
+  "split_id": "84603db211dc1463ee020039f3227caad73f3a8cf4b274683ea59e53384251e8",
+  "csv_sha256": "417052af60ea9da985478d93d6be49749d25c8d0168a14bbd9f94515ab80c6ce",
+  "model_sha256": "b03b0498c128de3028234b7fbbed9abe227f0e2e26de97e823c9ebf5f5b4387c",
+  "sklearn_version": "1.9.1",
+  "training_records": 2395,
+  "cv_folds": 5,
+  "selection_metric": "five-fold training-only macro F1; name breaks ties",
+  "comparison": [
+    {
+      "model": "hist_gradient_boosting",
+      "cv_macro_f1": 0.5236107197717941,
+      "cv_macro_f1_std": 0.018740718051703412,
+      "cv_balanced_accuracy": 0.5242248762969812,
+      "cv_balanced_accuracy_std": 0.01845120268857336,
+      "cv_roc_auc": 0.5309445020559057,
+      "cv_roc_auc_std": 0.014610872118364385
+    },
+    {
+      "model": "logistic_C0.1",
+      "cv_macro_f1": 0.512949966858725,
+      "cv_macro_f1_std": 0.009967821848516181,
+      "cv_balanced_accuracy": 0.513106936343323,
+      "cv_balanced_accuracy_std": 0.010032261814235144,
+      "cv_roc_auc": 0.5114453440530127,
+      "cv_roc_auc_std": 0.015813634905031234
+    },
+    {
+      "model": "logistic_C1",
+      "cv_macro_f1": 0.5125346251266812,
+      "cv_macro_f1_std": 0.010731113746735943,
+      "cv_balanced_accuracy": 0.512684995415053,
+      "cv_balanced_accuracy_std": 0.010803834388179674,
+      "cv_roc_auc": 0.5115081139491734,
+      "cv_roc_auc_std": 0.01578618397626802
+    },
+    {
+      "model": "random_forest_full",
+      "cv_macro_f1": 0.5092875102691062,
+      "cv_macro_f1_std": 0.0029720094316561673,
+      "cv_balanced_accuracy": 0.5093146036214351,
+      "cv_balanced_accuracy_std": 0.0029659489702438366,
+      "cv_roc_auc": 0.5194102440467615,
+      "cv_roc_auc_std": 0.010955034678592355
+    },
+    {
+      "model": "random_forest_depth6",
+      "cv_macro_f1": 0.5088984588481306,
+      "cv_macro_f1_std": 0.004856778768989419,
+      "cv_balanced_accuracy": 0.5089937067605297,
+      "cv_balanced_accuracy_std": 0.004841660719717564,
+      "cv_roc_auc": 0.5215338365855553,
+      "cv_roc_auc_std": 0.008523962730841618
+    }
+  ],
+  "training_seconds": 7.023670599999605,
+  "created_utc": "2026-10-22T14:29:53.615098+00:00",
+  "device": "CPU",
+  "test_metrics": {
+    "records": 599,
+    "accuracy": 0.5091819699499165,
+    "accuracy_wilson_95": [
+      0.4692169486578002,
+      0.549029971554885
+    ],
+    "balanced_accuracy": 0.5098563910445099,
+    "macro_f1": 0.5078638497652582,
+    "roc_auc": 0.5308792703594684,
+    "confusion_matrix": [
+      [
+        168,
+        128
+      ],
+      [
+        166,
+        137
+      ]
+    ],
+    "per_class": {
+      "NO": {
+        "precision": 0.5029940119760479,
+        "recall": 0.5675675675675675,
+        "f1-score": 0.5333333333333333,
+        "support": 296.0
+      },
+      "YES": {
+        "precision": 0.5169811320754717,
+        "recall": 0.4521452145214521,
+        "f1-score": 0.4823943661971831,
+        "support": 303.0
+      },
+      "accuracy": 0.5091819699499165,
+      "macro avg": {
+        "precision": 0.5099875720257598,
+        "recall": 0.5098563910445099,
+        "f1-score": 0.5078638497652582,
+        "support": 599.0
+      },
+      "weighted avg": {
+        "precision": 0.5100692997725845,
+        "recall": 0.5091819699499165,
+        "f1-score": 0.5075662097235613,
+        "support": 599.0
+      }
+    },
+    "model": "hist_gradient_boosting",
+    "run": "numerical_v1",
+    "split_id": "84603db211dc1463ee020039f3227caad73f3a8cf4b274683ea59e53384251e8",
+    "threshold": 0.5,
+    "baseline": {
+      "records": 599,
+      "accuracy": 0.5058430717863105,
+      "accuracy_wilson_95": [
+        0.4658953471935781,
+        0.5457163293054035
+      ],
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.33592017738359203,
+      "roc_auc": 0.5,
+      "confusion_matrix": [
+        [
+          0,
+          296
+        ],
+        [
+          0,
+          303
+        ]
+      ],
+      "per_class": {
+        "NO": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1-score": 0.0,
+          "support": 296.0
+        },
+        "YES": {
+          "precision": 0.5058430717863105,
+          "recall": 1.0,
+          "f1-score": 0.6718403547671841,
+          "support": 303.0
+        },
+        "accuracy": 0.5058430717863105,
+        "macro avg": {
+          "precision": 0.25292153589315525,
+          "recall": 0.5,
+          "f1-score": 0.33592017738359203,
+          "support": 599.0
+        },
+        "weighted avg": {
+          "precision": 0.2558772132742105,
+          "recall": 0.5058430717863105,
+          "f1-score": 0.339845788805437,
+          "support": 599.0
+        }
+      }
+    },
+    "evaluation": "single fixed held-out row-level test"
+  },
+  "quality_note": "Performance is near chance. This dataset/model has not demonstrated reliable predictive skill.",
+  "evaluation_note": "Held-out test evaluated after CV selection.",
+  "classifier_parameters": {
+    "categorical_features": "from_dtype",
+    "class_weight": "balanced",
+    "early_stopping": "auto",
+    "interaction_cst": null,
+    "l2_regularization": 2,
+    "learning_rate": 0.05,
+    "loss": "log_loss",
+    "max_bins": 255,
+    "max_depth": null,
+    "max_features": 1.0,
+    "max_iter": 120,
+    "max_leaf_nodes": 7,
+    "min_samples_leaf": 20,
+    "monotonic_cst": null,
+    "n_iter_no_change": 10,
+    "random_state": 42,
+    "scoring": "loss",
+    "tol": 1e-07,
+    "validation_fraction": 0.1,
+    "verbose": 0,
+    "warm_start": false
+  }
+}

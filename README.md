@@ -18,6 +18,10 @@ powershell -ExecutionPolicy Bypass -File .\run.ps1
 
 Open http://localhost:8501. The sidebar groups Home, Data, Preprocessing & EDA, Training & Tuning, Evaluation, Model Insights, Single-record prediction, and CSV batch prediction. Enter all 15 inputs or load an example on the prediction page, then select Predict dataset label. The CSV batch page provides a template. Changing inputs clears previous predictions. Uploaded records are processed in memory and are not saved.
 
+## Deploy on AWS
+
+Use the [AWS EC2 deployment template and guide](deploy/aws/README.md). The CloudFormation template installs Python 3.12, verifies the saved model, and runs Streamlit behind Nginx as a service. Review AWS charges and the Systems Manager IAM role before creating the stack. The initial deployment provides an HTTP demonstration URL; a custom domain and HTTPS are separate configuration steps.
+
 ## Set up a fresh machine
 
 Python 3.12 is supported. This is a **CPU-only** scikit-learn application; CUDA and PyTorch are not required.

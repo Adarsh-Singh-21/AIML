@@ -1,0 +1,17 @@
+{
+  "deployment": "AWS EC2 CloudFormation",
+  "region_checked": "ap-northeast-1",
+  "application_revision": "3cc7df8111a4232c86377783b57705504270cdb1",
+  "instance_type": "t3.micro",
+  "root_volume": "8 GiB encrypted gp3",
+  "validation": {
+    "cfn_lint_version": "1.58.0",
+    "cfn_lint_errors_and_warnings": 0,
+    "bootstrap_bash_syntax": "passed; script was not executed locally",
+    "model_and_data": "existing saved artifacts reused",
+    "python312_linux_dependency_wheels": "all nine pinned direct packages available on PyPI"
+  },
+  "aws_launch": "not performed; awaiting approval for charges and IAM resource creation",
+  "live_health_and_predictions": "not tested on AWS yet",
+  "endpoint": "HTTP demonstration; HTTPS requires additional domain/TLS configuration"
+}

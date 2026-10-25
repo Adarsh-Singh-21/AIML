@@ -7,7 +7,7 @@ from pathlib import PurePosixPath
 from . import ROOT
 from .utils import sha256, write_json
 
-DIRECTORIES = ("lung_tabular", "lung_ai", "ui_pages", "tests", "docs", "notebooks", "samples/numerical",
+DIRECTORIES = ("lung_tabular", "lung_ai", "ui_pages", "tests", "docs", "deploy/aws", "notebooks", "samples/numerical",
                "data/numerical/akashnath29", "artifacts/numerical", "reports/numerical", ".streamlit")
 FILES = ("app.py", "README.md", "PROJECT_PLAN.md", "requirements.txt", "requirements.lock.txt",
          "setup.ps1", "run.ps1", "train.ps1", "pytest.ini", "reports/FINAL_REPORT.md")

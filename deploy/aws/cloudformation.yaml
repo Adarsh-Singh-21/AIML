@@ -1,0 +1,222 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Numerical lung cancer demonstration on one EC2 instance with Nginx and Streamlit.
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small]
+    Description: t3.micro has 1 GiB RAM; t3.small has 2 GiB and costs more.
+  AmazonLinuxImage:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+  CodeRevision:
+    Type: String
+    Default: 3cc7df8111a4232c86377783b57705504270cdb1
+    AllowedPattern: '[a-f0-9]{40}'
+    Description: Exact public GitHub commit to install; deployment does not retrain the model.
+
+Resources:
+  AppVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.82.0.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-vpc'
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  GatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref AppVpc
+      InternetGatewayId: !Ref InternetGateway
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref AppVpc
+      CidrBlock: 10.82.0.0/25
+      MapPublicIpOnLaunch: true
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref AppVpc
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  SubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public HTTP demonstration; administration uses AWS Systems Manager.
+      VpcId: !Ref AppVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: Public application through Nginx
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: 0.0.0.0/0
+          Description: Package installation and AWS Systems Manager
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [!Ref InstanceRole]
+  AppInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: [InternetRoute, SubnetRouteAssociation]
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT20M
+    Properties:
+      ImageId: !Ref AmazonLinuxImage
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref InstanceProfile
+      CreditSpecification:
+        CPUCredits: standard
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+        HttpPutResponseHopLimit: 1
+      NetworkInterfaces:
+        - DeviceIndex: '0'
+          AssociatePublicIpAddress: true
+          SubnetId: !Ref PublicSubnet
+          GroupSet: [!Ref AppSecurityGroup]
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 8
+            Encrypted: true
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-app'
+        - Key: Project
+          Value: LungNumerical
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -Eeuo pipefail
+          exec > >(tee -a /var/log/lung-app-bootstrap.log /dev/console) 2>&1
+          dnf install -y aws-cfn-bootstrap
+          trap '/opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource AppInstance --region ${AWS::Region}' EXIT
+          dnf install -y python3.12 python3.12-pip git nginx
+          useradd --system --home-dir /var/lib/lung-app --shell /sbin/nologin lungapp
+          git clone --no-checkout https://github.com/Adarsh-Singh-21/AIML.git /opt/lung-app
+          cd /opt/lung-app
+          git checkout --detach '${CodeRevision}'
+          python3.12 -m venv /opt/lung-app/.venv
+          /opt/lung-app/.venv/bin/python -m pip install --no-cache-dir -r requirements.txt
+          /opt/lung-app/.venv/bin/python -c 'from lung_tabular.model import load_model, resolve_run; load_model(resolve_run()[0]); print("Saved model verified")'
+          cat > /etc/systemd/system/lung-app.service <<'SERVICE'
+          [Unit]
+          Description=Numerical lung cancer Streamlit demonstration
+          After=network-online.target
+          Wants=network-online.target
+          [Service]
+          Type=simple
+          User=lungapp
+          Group=lungapp
+          WorkingDirectory=/opt/lung-app
+          Environment=HOME=/var/lib/lung-app
+          Environment=MPLBACKEND=Agg
+          Environment=MPLCONFIGDIR=/var/cache/lung-app/matplotlib
+          Environment=XDG_CACHE_HOME=/var/cache/lung-app
+          Environment=OMP_NUM_THREADS=1
+          Environment=OPENBLAS_NUM_THREADS=1
+          StateDirectory=lung-app
+          CacheDirectory=lung-app
+          ExecStart=/opt/lung-app/.venv/bin/python -m streamlit run app.py --server.address=127.0.0.1 --server.port=8501 --server.headless=true
+          Restart=on-failure
+          RestartSec=5
+          NoNewPrivileges=true
+          PrivateTmp=true
+          ProtectSystem=strict
+          ProtectHome=true
+          UMask=0077
+          [Install]
+          WantedBy=multi-user.target
+          SERVICE
+          cat > /etc/nginx/conf.d/lung-app.conf <<'NGINX'
+          server {
+              listen 80;
+              server_name _;
+              client_max_body_size 10m;
+              location / {
+                  proxy_pass http://127.0.0.1:8501;
+                  proxy_http_version 1.1;
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Forwarded-Proto $scheme;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection "upgrade";
+                  proxy_read_timeout 3600s;
+                  proxy_buffering off;
+              }
+          }
+          NGINX
+          cat > /etc/nginx/nginx.conf <<'NGINX_MAIN'
+          user nginx;
+          worker_processes auto;
+          error_log /var/log/nginx/error.log warn;
+          pid /run/nginx.pid;
+          events {
+              worker_connections 1024;
+          }
+          http {
+              include /etc/nginx/mime.types;
+              default_type application/octet-stream;
+              access_log /var/log/nginx/access.log;
+              sendfile on;
+              keepalive_timeout 65;
+              include /etc/nginx/conf.d/*.conf;
+          }
+          NGINX_MAIN
+          nginx -t
+          systemctl daemon-reload
+          systemctl enable --now amazon-ssm-agent lung-app nginx
+          for attempt in $(seq 1 90); do
+              if curl --fail --silent http://127.0.0.1/_stcore/health; then
+                  echo 'Application health check passed'
+                  exit 0
+              fi
+              sleep 2
+          done
+          journalctl -u lung-app --no-pager -n 50
+          exit 1
+
+Outputs:
+  ApplicationUrl:
+    Description: HTTP demonstration URL. Configure a domain and HTTPS before handling private records.
+    Value: !Sub 'http://${AppInstance.PublicIp}'
+  InstanceId:
+    Value: !Ref AppInstance
+  InstalledRevision:
+    Value: !Ref CodeRevision

@@ -58,7 +58,7 @@ Resources:
   AppSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Public HTTP demonstration; administration uses AWS Systems Manager.
+      GroupDescription: Public HTTP demonstration with no inbound administration ports.
       VpcId: !Ref AppVpc
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -69,23 +69,7 @@ Resources:
       SecurityGroupEgress:
         - IpProtocol: '-1'
           CidrIp: 0.0.0.0/0
-          Description: Package installation and AWS Systems Manager
-  InstanceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ec2.amazonaws.com
-            Action: sts:AssumeRole
-      ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
-  InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Roles: [!Ref InstanceRole]
+          Description: Package installation and CloudFormation readiness signal
   AppInstance:
     Type: AWS::EC2::Instance
     DependsOn: [InternetRoute, SubnetRouteAssociation]
@@ -96,7 +80,6 @@ Resources:
     Properties:
       ImageId: !Ref AmazonLinuxImage
       InstanceType: !Ref InstanceType
-      IamInstanceProfile: !Ref InstanceProfile
       CreditSpecification:
         CPUCredits: standard
       MetadataOptions:
@@ -201,7 +184,7 @@ Resources:
           NGINX_MAIN
           nginx -t
           systemctl daemon-reload
-          systemctl enable --now amazon-ssm-agent lung-app nginx
+          systemctl enable --now lung-app nginx
           for attempt in $(seq 1 90); do
               if curl --fail --silent http://127.0.0.1/_stcore/health; then
                   echo 'Application health check passed'

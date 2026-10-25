@@ -51,7 +51,7 @@ Open http://localhost:8501. The sidebar groups Home, Data, Preprocessing & EDA, 
 
 ## Deploy on AWS
 
-Use the [AWS EC2 deployment template and guide](deploy/aws/README.md). The CloudFormation template installs Python 3.12, verifies the saved model, and runs Streamlit behind Nginx as a service. Review AWS charges and the Systems Manager IAM role before creating the stack. The initial deployment provides an HTTP demonstration URL; a custom domain and HTTPS are separate configuration steps.
+Use the [AWS EC2 deployment template and guide](deploy/aws/README.md). The CloudFormation template installs Python 3.12, verifies the saved model, and runs Streamlit behind Nginx as a service. For zero-charge hosting, first verify the AWS Free account plan; resources consume its credits and access ends when the plan or credits expire. The template creates no IAM role. The initial deployment provides an HTTP demonstration URL; a custom domain and HTTPS are separate configuration steps.
 
 ## Set up a fresh machine
 

@@ -11,7 +11,9 @@
     "model_and_data": "existing saved artifacts reused",
     "python312_linux_dependency_wheels": "all nine pinned direct packages available on PyPI"
   },
-  "aws_launch": "not performed; awaiting approval for charges and IAM resource creation",
+  "launch_policy": "Requires a verified AWS Free account plan for the user's zero-charge condition; no plan upgrades permitted",
+  "iam_resources_created_by_template": 0,
+  "aws_launch": "not performed yet",
   "live_health_and_predictions": "not tested on AWS yet",
   "endpoint": "HTTP demonstration; HTTPS requires additional domain/TLS configuration"
 }

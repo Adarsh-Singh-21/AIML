@@ -8,11 +8,10 @@
 - One encrypted 8 GiB gp3 root disk, removed on instance termination.
 - One automatically assigned public IPv4 address.
 - A dedicated VPC, public subnet, internet gateway, route table, and security group.
-- An EC2 IAM role and instance profile with `AmazonSSMManagedInstanceCore` for administration through Systems Manager.
-- Public inbound HTTP on TCP 80. No inbound SSH or Streamlit port is opened.
+- Public inbound HTTP on TCP 80. No IAM role, instance profile, inbound SSH, or public Streamlit port is created.
 - Standard CPU credits; no T3 Unlimited surplus-credit charging.
 
-EC2, EBS, public IPv4, and applicable data transfer can incur charges. Free Tier or credits depend on the account. Creating a stack requires explicit approval for these resources and IAM permissions.
+EC2, EBS, public IPv4, and applicable data transfer normally incur charges. On the AWS Free account plan they consume credits, and the account closes when credits or the plan period expire. A paid account can receive bills after credits expire. For the user's zero-charge requirement, launch only after verifying the console explicitly says the account is on the Free plan, and never upgrade it. Budget alerts alone do not enforce a zero-charge limit.
 
 ## What starts automatically
 
@@ -26,8 +25,8 @@ CloudFormation waits up to 20 minutes for the bootstrap health signal. A failed 
 
 1. Open CloudFormation in the chosen AWS region and select **Create stack → With new resources**.
 2. Upload `cloudformation.yaml` and choose a stack name, such as `lung-numerical-demo`.
-3. Review the instance size, code revision, costs, networking, and IAM role.
-4. Acknowledge IAM resource creation only after approving the role. Submit the stack after approving the AWS charges.
+3. Verify the account is still on the Free plan; review the instance size, code revision, credit consumption, and networking.
+4. Submit only when zero-charge Free plan coverage is verified. This template does not require an IAM capability acknowledgement. Stop if AWS requires upgrading the account to deploy it.
 5. Wait for `CREATE_COMPLETE`, then open `ApplicationUrl` in Outputs.
 6. Verify Home, Evaluation, numerical prediction, and CSV prediction in the deployed app.
 
@@ -35,7 +34,7 @@ The initial URL uses HTTP. Use demonstration inputs until a custom domain and HT
 
 ## Operations
 
-Use EC2 → Connect → Session Manager for administration after the agent registers. Service logs are available with `journalctl -u lung-app`. Stopping an instance stops its compute billing, but EBS storage and other retained resources can still incur charges. Review stack deletion before cleanup; deletion removes this server and its root disk.
+Bootstrap output is available in EC2 → Actions → Monitor and troubleshoot → Get system log. This deployment creates no SSH key, IAM administration role, or Session Manager access. Review a replacement plan for code updates and recovery. Stopping an instance stops its compute usage, but EBS storage and other retained resources still consume credits or incur charges on paid accounts. Review stack deletion before cleanup; deletion removes this server and its root disk.
 
 ## Validation status
 

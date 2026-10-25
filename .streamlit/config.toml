@@ -1,5 +1,5 @@
 [server]
-address = "127.0.0.1"
+# Let the hosting platform select the bind address; run.ps1 sets localhost locally.
 headless = true
 maxUploadSize = 10
 

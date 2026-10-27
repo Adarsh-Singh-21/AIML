@@ -10,23 +10,14 @@ from .data import encode_features
 from .utils import read_json, sha256
 
 
-def candidates():
-    """Compatibility entry point for notebook-defined model configurations."""
-    from .notebook_workflow import workflow_function
-    return workflow_function("candidates")()
-
-
-def metrics(truth, predicted, scores):
-    """Compatibility entry point for notebook-defined evaluation calculations."""
-    from .notebook_workflow import workflow_function
-    return workflow_function("metrics")(truth, predicted, scores)
-
-
 def train_run(run_name="numerical_v1", data_dir=DATA, reports=REPORTS, artifacts=ARTIFACTS):
-    """Keep existing training commands working through the notebook implementation."""
-    from .notebook_workflow import workflow_function
-    return workflow_function("train_run")(run_name, data_dir, reports, artifacts,
-                                          candidate_factory=candidates)
+    """Run the training notebook when the user requests the existing CLI command."""
+    if Path(run_name).name != run_name or run_name in {"", ".", ".."}:
+        raise ValueError("Run name must be a single directory name.")
+    if (Path(artifacts) / run_name).exists():
+        raise ValueError("This run already exists. Use a new run name.")
+    from .notebook_runner import run_workflow
+    return run_workflow(run_name, data_dir, reports, artifacts)
 
 
 def resolve_run(artifacts=ARTIFACTS):

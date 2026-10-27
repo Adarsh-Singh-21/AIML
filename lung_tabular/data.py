@@ -91,9 +91,9 @@ def encode_features(frame, encoding="numeric", age_range=(18, 100)):
 
 
 def prepare_data(data_dir=DATA, reports=REPORTS):
-    """Compatibility entry point; preprocessing is defined in notebooks/train.ipynb."""
-    from .notebook_workflow import workflow_function
-    return workflow_function("prepare_data")(data_dir, reports)
+    """Run the notebook's data-preparation section for the existing CLI command."""
+    from .notebook_runner import run_workflow
+    return run_workflow(data_dir=data_dir, reports=reports, prepare_only=True)
 
 
 def read_prepared(data_dir=DATA, reports=REPORTS):

@@ -3,7 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 import pytest
-from sklearn.linear_model import LogisticRegression
 
 from lung_tabular import BINARY_FEATURES, FEATURES, TARGET
 from lung_tabular.data import encode_features, prepare_data, read_prepared
@@ -85,10 +84,8 @@ def test_duplicate_conflict_audit_and_fixed_split_integrity(raw_dataset):
         read_prepared(data, reports)
 
 
-def test_training_reload_prediction_and_frozen_test(raw_dataset, monkeypatch):
-    import lung_tabular.model as training
+def test_training_reload_prediction_and_frozen_test(raw_dataset):
     data, reports, artifacts = raw_dataset
-    monkeypatch.setattr(training, "candidates", lambda: {"logistic_fixture": LogisticRegression(max_iter=200, random_state=42)})
     metadata = train_run("first", data, reports, artifacts)
     frame, _ = read_prepared(data, reports)
     run, selected = resolve_run(artifacts)

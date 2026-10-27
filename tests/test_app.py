@@ -97,14 +97,13 @@ def test_batch_prediction_and_invalid_csv_clear_results(app_fixture, monkeypatch
     assert not app.exception and any("Column mismatch" in error.value for error in app.error)
 
 
-def test_sidebar_credits_and_evaluation_metrics_use_saved_evidence(app_fixture):
-    from lung_tabular.model import metrics
+def test_sidebar_credits_and_evaluation_metrics_use_saved_evidence(app_fixture, evaluation_evidence):
     from lung_tabular.utils import read_json
     artifacts = lung_tabular.ARTIFACTS
     path = artifacts / "fixture/metadata.json"
     metadata = read_json(path)
-    evaluation = metrics([0, 0, 0, 1], [0, 0, 1, 1], [0.1, 0.2, 0.8, 0.9])
-    evaluation.update({"model": "fixture_logistic", "baseline": metrics([0, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0])})
+    evaluation = evaluation_evidence
+    evaluation["model"] = "fixture_logistic"
     metadata["test_metrics"] = evaluation
     write_json(path, metadata)
     original_metadata = path.read_bytes()

@@ -3,8 +3,8 @@ from . import DATA, REPORTS
 
 
 def generate_diagnostics(data_dir=DATA, reports=REPORTS):
-    from .notebook_workflow import workflow_function
-    return workflow_function("generate_diagnostics")(data_dir, reports)
+    from .notebook_runner import run_workflow
+    return run_workflow(data_dir=data_dir, reports=reports, diagnostics=True)
 
 
 if __name__ == "__main__":

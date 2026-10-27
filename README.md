@@ -73,9 +73,12 @@ installed model. To train, set `TRAIN_NEW_MODEL = True` and choose a fresh
 saves the same model/report formats and activates the new run for the app.
 `REGENERATE_DIAGNOSTICS` separately controls optional feature-diagnostic updates.
 
-The existing terminal commands also remain available. Their small compatibility
-functions load the notebook's tagged definitions; they do not run its example
-cells or require a running Jupyter server.
+The notebook is organised into numbered sections with direct, step-by-step code.
+The existing terminal commands also remain available: they use Jupyter's standard
+notebook executor, with no notebook-code extraction. Preparation commands stop
+after the data-preparation section; training commands run the complete workflow.
+An executed copy is saved to `.cache/last_notebook_run.ipynb`. A Jupyter server
+does not need to be opened manually.
 
 ```powershell
 .\.venv\Scripts\python.exe -m lung_tabular download-data

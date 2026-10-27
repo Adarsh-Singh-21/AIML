@@ -87,7 +87,7 @@ powershell -ExecutionPolicy Bypass -File .\\train.ps1 -RunName my_numerical_run
 
 The five predefined candidates are two regularized logistic regressions, two random forests, and histogram gradient boosting. Five-fold stratified CV uses only training records. StandardScaler is inside each Pipeline and is fitted separately in each fold. The highest CV macro F1 wins; the final estimator fits the training partition. The initial selected run was evaluated once on the reserved test partition with a fixed 0.5 threshold. Test scores were not used for candidate selection. Training and initial evaluation took **{metadata['training_seconds']:.2f} seconds on CPU**.
 
-Subsequent runs preserve the viewed test evaluation and report CV only; they do not claim a new independent test score. Existing run folders and split manifests are never silently overwritten. New training activates that numerical run. Model candidates are defined in lung_tabular/model.py. To reuse the included trained model, just run the app.
+Subsequent runs preserve the viewed test evaluation and report CV only; they do not claim a new independent test score. Existing run folders and split manifests are never silently overwritten. New training activates that numerical run. Preprocessing, model candidates, training and evaluation calculations are defined in notebooks/train.ipynb. To reuse the included trained model, just run the app.
 
 ```powershell
 .\\.venv\\Scripts\\python.exe -m lung_tabular predict --csv samples/numerical/inputs.csv --output predictions.csv

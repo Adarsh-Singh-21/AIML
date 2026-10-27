@@ -8,7 +8,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
 
 from . import BINARY_FEATURES, DATA, DATASET_URL, FEATURES, REPORTS, SCHEMA_VERSION, TARGET
 from .utils import read_json, sha256, write_json
@@ -92,47 +91,9 @@ def encode_features(frame, encoding="numeric", age_range=(18, 100)):
 
 
 def prepare_data(data_dir=DATA, reports=REPORTS):
-    data_dir, reports = Path(data_dir), Path(reports)
-    csv = data_dir / "lung_cancer.csv"
-    source = read_json(data_dir / "source.json")
-    if sha256(csv) != source["csv_sha256"]:
-        raise ValueError("Raw CSV no longer matches the recorded dataset hash.")
-    if (reports / "dataset_summary.json").exists():
-        _, summary = read_prepared(data_dir, reports)
-        return summary
-    raw = normalize_columns(pd.read_csv(csv))
-    if TARGET not in raw:
-        raise ValueError("Dataset is missing LUNG_CANCER.")
-    target = raw[TARGET].astype(str).str.strip().str.upper()
-    if not target.isin(["NO", "YES"]).all():
-        raise ValueError("Targets must be YES or NO; unknown labels are not remapped.")
-    encoded = encode_features(raw.drop(columns=TARGET), "survey")
-    encoded[TARGET] = target.map({"NO": 0, "YES": 1})
-    encoded["row_id"] = [hashlib.sha256(json.dumps([int(v) for v in values]).encode()).hexdigest()
-                         for values in encoded.loc[:, list(FEATURES)].itertuples(index=False, name=None)]
-    conflict_ids = set(encoded.groupby("row_id")[TARGET].nunique().loc[lambda values: values > 1].index)
-    conflicting = encoded[encoded["row_id"].isin(conflict_ids)]
-    remaining = encoded[~encoded["row_id"].isin(conflict_ids)]
-    duplicates = remaining[remaining.duplicated("row_id", keep="first")]
-    clean = remaining.drop_duplicates("row_id").sort_values("row_id").reset_index(drop=True)
-    train_ids, test_ids = train_test_split(clean.row_id, test_size=0.20, stratify=clean[TARGET], random_state=42)
-    clean["split"] = np.where(clean.row_id.isin(set(train_ids)), "train", "test")
-    split_id = hashlib.sha256(json.dumps(clean.to_dict(orient="records"), sort_keys=True).encode()).hexdigest()
-    summary = {"schema_version": SCHEMA_VERSION, "split_id": split_id, "csv_sha256": source["csv_sha256"],
-               "source": source, "raw_rows": len(raw), "usable_rows": len(clean),
-               "duplicate_rows_removed": len(duplicates), "conflicting_rows_removed": len(conflicting),
-               "conflicting_feature_groups": len(conflict_ids), "features": list(FEATURES),
-               "age_range": [int(encoded.AGE.min()), int(encoded.AGE.max())], "seed": 42,
-               "split_counts": {split: {label: int(((clean.split == split) & (clean[TARGET] == value)).sum())
-                                        for value, label in enumerate(("NO", "YES"))} for split in ("train", "test")},
-               "limitation": "No verified patient IDs or external validation; source label provenance is unverified."}
-    reports.mkdir(parents=True, exist_ok=True)
-    clean.to_csv(reports / "prepared_records.csv", index=False)
-    exclusions = pd.concat([conflicting.assign(reason="conflicting label for identical features"),
-                            duplicates.assign(reason="duplicate feature record")])
-    exclusions.loc[:, ["row_id", "reason"]].to_csv(reports / "exclusions.csv", index=False)
-    write_json(reports / "dataset_summary.json", summary)
-    return summary
+    """Compatibility entry point; preprocessing is defined in notebooks/train.ipynb."""
+    from .notebook_workflow import workflow_function
+    return workflow_function("prepare_data")(data_dir, reports)
 
 
 def read_prepared(data_dir=DATA, reports=REPORTS):

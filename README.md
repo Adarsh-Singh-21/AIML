@@ -62,6 +62,21 @@ Prediction CSVs require **exactly these 15 columns**, without the target, person
 
 ## Training and evaluation
 
+Open **[notebooks/train.ipynb](notebooks/train.ipynb)** in VS Code and select the
+project's `.venv` Python kernel. The notebook contains the actual preprocessing,
+candidate models, cross-validation, training, metric calculations, confusion
+matrix, ROC and training-only feature diagnostics.
+
+Use **Run All** to inspect the dataset and existing results without replacing the
+installed model. To train, set `TRAIN_NEW_MODEL = True` and choose a fresh
+`RUN_NAME` in the configuration cell, then run the notebook from the top. This
+saves the same model/report formats and activates the new run for the app.
+`REGENERATE_DIAGNOSTICS` separately controls optional feature-diagnostic updates.
+
+The existing terminal commands also remain available. Their small compatibility
+functions load the notebook's tagged definitions; they do not run its example
+cells or require a running Jupyter server.
+
 ```powershell
 .\.venv\Scripts\python.exe -m lung_tabular download-data
 .\.venv\Scripts\python.exe -m lung_tabular prepare-data
@@ -70,7 +85,7 @@ powershell -ExecutionPolicy Bypass -File .\train.ps1 -RunName my_numerical_run
 
 The five predefined candidates are two regularized logistic regressions, two random forests, and histogram gradient boosting. Five-fold stratified CV uses only training records. StandardScaler is inside each Pipeline and is fitted separately in each fold. The highest CV macro F1 wins; the final estimator fits the training partition. The initial selected run was evaluated once on the reserved test partition with a fixed 0.5 threshold. Test scores were not used for candidate selection. Training and initial evaluation took **7.02 seconds on CPU**.
 
-Subsequent runs preserve the viewed test evaluation and report CV only; they do not claim a new independent test score. Existing run folders and split manifests are never silently overwritten. New training activates that numerical run. Model candidates are defined in lung_tabular/model.py. To reuse the included trained model, just run the app.
+Subsequent runs preserve the viewed test evaluation and report CV only; they do not claim a new independent test score. Existing run folders and split manifests are never silently overwritten. New training activates that numerical run. Model candidates are defined in notebooks/train.ipynb. To reuse the included trained model, just run the app.
 
 ```powershell
 .\.venv\Scripts\python.exe -m lung_tabular predict --csv samples/numerical/inputs.csv --output predictions.csv
@@ -81,11 +96,11 @@ Use `--encoding survey` for original F/M and 1/2 input codes. `python -m lung_ai
 ## Project files
 
 - app.py and ui_pages/: grouped sidebar navigation, Home, model-building pages, Evaluation, and numerical prediction pages.
-- lung_tabular/: strict input schema, dataset audit, training, prediction, reporting, and packaging.
+- lung_tabular/: runtime input validation, saved-model loading and prediction, dashboard table formatting, reporting, packaging, and compatibility entry points to the notebook's offline workflow.
 - data/numerical/akashnath29/: requested dataset and provenance.
 - artifacts/numerical/: active pointer, saved Pipeline, metadata, CV scores, and frozen test predictions.
 - reports/numerical/: fixed records/splits, exclusions, evaluation, plots, and verification.
-- notebooks/train.ipynb: executable numerical workflow; included model reused unless training is explicitly requested.
+- notebooks/train.ipynb: preprocessing, ML training, evaluation calculations and plots; included model reused unless training is explicitly requested.
 - docs/: dataset card, model card, and presentation/demo guide.
 - legacy_ct/: preserved historical CT project, excluded from this project's app, tests, and new package.
 

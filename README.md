@@ -96,6 +96,26 @@ Subsequent runs preserve the viewed test evaluation and report CV only; they do 
 
 Use `--encoding survey` for original F/M and 1/2 input codes. `python -m lung_ai` forwards to the numerical CLI for compatibility. Saved local models are hash-checked before loading; never replace them with untrusted pickle/joblib files. The app does not accept model uploads.
 
+### Accuracy improvement experiment
+
+Open [notebooks/improve_accuracy.ipynb](notebooks/improve_accuracy.ipynb) to inspect
+or repeat the training-only accuracy comparison. It compares 15 recipes, checks
+six shortlisted recipes with nested validation, and saves the best screened
+candidate separately. The default displays saved results; repeating training
+requires `RUN_EXPERIMENT = True` and a new candidate run name.
+
+The best screened candidate reached **53.61% CV accuracy**, compared with
+**52.40%** for the current model on the same folds. However, the shortlisted
+selection procedure averaged **51.86%** on the additional outer folds, versus
+**52.57%** for the reference. This does not establish a reliable improvement.
+The original model remains active, and its **50.92% original test accuracy** is
+unchanged. Screening, outer validation and the original test are different
+measurements and must not be compared as if they used the same records.
+
+The experimental pipeline is saved as
+`artifacts/numerical/accuracy_candidate_20261027/`. Detailed evidence is in
+`reports/numerical/accuracy_improvement.json` and `accuracy_screening.csv`.
+
 ## Project files
 
 - app.py and ui_pages/: grouped sidebar navigation, Home, model-building pages, Evaluation, and numerical prediction pages.

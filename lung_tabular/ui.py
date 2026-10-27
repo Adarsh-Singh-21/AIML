@@ -15,6 +15,7 @@ from .utils import read_json
 
 DEVELOPERS = "Adarsh Raj Choudhary, Adarsh Singh, Adith K P"
 PROFESSOR = "Prof. Vaishali Ingale"
+EVALUATOR = "Vaishali Ingle"
 
 
 def context():
@@ -50,7 +51,7 @@ def render_home():
     metadata = context()["metadata"]
     header("🫁 Lung Cancer · Numerical Data", "AIML Mini Project · dataset: Akash Nath / Kaggle · numerical questionnaire classification")
     with st.container(border=True):
-        st.markdown(f"👥 **Developed by:** {DEVELOPERS}  \n🎓 **Submitted to:** {PROFESSOR}")
+        st.markdown(f"👥 **Developed by:** {DEVELOPERS}  \n🎓 **Submitted to:** {PROFESSOR}  \n📝 **Evaluator:** {EVALUATOR}")
     left, right = st.columns([1.65, 1], gap="large")
     with left:
         st.subheader("The problem")

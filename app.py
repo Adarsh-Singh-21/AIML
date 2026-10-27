@@ -5,7 +5,7 @@ import streamlit as st
 
 from lung_tabular import ARTIFACTS, REPORTS, ROOT
 from lung_tabular.model import load_model, resolve_run
-from lung_tabular.ui import DEVELOPERS, PROFESSOR
+from lung_tabular.ui import DEVELOPERS, PROFESSOR, EVALUATOR
 
 st.set_page_config(page_title="Numerical Lung Cancer Project", page_icon="🫁", layout="wide", initial_sidebar_state="expanded")
 st.markdown("""<style>
@@ -92,6 +92,7 @@ with st.sidebar:
     st.radio("Evaluation focus", ["YES class", "Macro average"], key="evaluation_focus",
              help="Controls precision, recall and F1 on the Evaluation page. Accuracy is unchanged.")
     st.markdown(f'<div class="project-credits"><strong>Developed by:</strong> {DEVELOPERS}<br>'
-                f'<strong>Submitted to:</strong> {PROFESSOR}</div>', unsafe_allow_html=True)
+                f'<strong>Submitted to:</strong> {PROFESSOR}<br>'
+                f'<strong>Evaluator:</strong> {EVALUATOR}</div>', unsafe_allow_html=True)
 
 page.run()
